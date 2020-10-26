@@ -1,0 +1,70 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/andrew/bd/lab2/lab2.csproj": {}
+  },
+  "projects": {
+    "/home/andrew/bd/lab2/lab2.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/andrew/bd/lab2/lab2.csproj",
+        "projectName": "lab2",
+        "projectPath": "/home/andrew/bd/lab2/lab2.csproj",
+        "packagesPath": "/home/andrew/.nuget/packages/",
+        "outputPath": "/home/andrew/bd/lab2/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/andrew/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.0": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.0": {
+          "dependencies": {
+            "Npgsql": {
+              "target": "Package",
+              "version": "[4.1.5, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[3.0.0, 3.0.0]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.0.103/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
