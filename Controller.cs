@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Npgsql;
+using ServiceStack.OrmLite;
 
-namespace lab2
+namespace lab3
 {
-    using FilteredCalls = System.Tuple<string, string, string, string>;
     public class Controller
     {
         private Users usersModel;
@@ -13,7 +12,6 @@ namespace lab2
         private PhoneCalls callsModel;
 
         private Viewer viewer;
-        NpgsqlConnection con;
 
         UsersController usersController;
         TariffsController tariffsController;
@@ -21,9 +19,9 @@ namespace lab2
         
         public Controller()
         {
-            var cs = "Host=localhost;Username=shylo;Password=shylo;Database=lab1";
-            con = new NpgsqlConnection(cs);
-            con.Open();
+            var cs = "Host=localhost;Username=shylo;Password=shylo;Database=lab3";
+            var dbFactory = new OrmLiteConnectionFactory(cs, PostgreSqlDialect.Provider);
+            var con = dbFactory.Open();
 
             usersModel = new Users(con);
             tariffsModel = new Tariffs(con);
@@ -197,7 +195,7 @@ namespace lab2
         private void PhoneCalls()
         {
             bool exit = false;
-            List<FilteredCalls> filtered = null;
+            List<(string, string, string, string)> filtered = null;
             List<Call> calls = null;
             while(!exit)
             {

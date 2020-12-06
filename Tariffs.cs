@@ -1,33 +1,30 @@
 using System;
 using System.Collections.Generic;
-using Npgsql;
+using System.Data;
+using ServiceStack.OrmLite;
+using ServiceStack.DataAnnotations;
 
-namespace lab2
+namespace lab3
 {
-    public readonly struct Tariff
+    [Alias("Tariffs")]
+    public class Tariff
     {
-        public Tariff(string name, int cost = 0,Guid? id = null)
-        {
-            Id = id;
-            Name = name;
-            Cost = cost;
-        }
-
+        [AutoId]
+        public Guid? Id {get;set;}
         
-        public Guid? Id {get;}
-        public string Name {get;}
-        public int Cost {get;}
+        public string Name {get;set;}
+
+        [Default(0)]
+        public int Cost {get;set;}
 
         public override string ToString() => $"{Id, -36} {Name, -32} {Cost, -4}";
     }
 
     public class Tariffs
     {
-        private NpgsqlConnection con;
+        IDbConnection con;
 
-        private string db = "\"Tariffs\"";
-
-        public Tariffs(NpgsqlConnection con)
+        public Tariffs(IDbConnection con)
         {
             this.con = con;
         }
@@ -36,18 +33,7 @@ namespace lab2
         {
             try
             {
-                string sql = $"SELECT * FROM {this.db}";
-                using var cmd = new NpgsqlCommand(sql, this.con);
-                using NpgsqlDataReader rdr = cmd.ExecuteReader();
-                List<Tariff> tariffs = new List<Tariff>();
-                
-                while(rdr.Read())
-                {
-                    Tariff tariff= new Tariff(rdr.GetString(0), rdr.GetInt32(1), rdr.GetGuid(2));
-                    tariffs.Add(tariff);
-                }
-
-                return tariffs;
+                return this.con.Select<Tariff>();
             }
             catch(Exception e)
             {
@@ -56,48 +42,21 @@ namespace lab2
             }
         }
 
-        private void AddUpdate(string sql, Tariff tariff)
-        {
-            try
-            {
-                using var cmd = new NpgsqlCommand(sql, this.con);
-
-                cmd.Parameters.AddWithValue("name", tariff.Name);
-                cmd.Parameters.AddWithValue("cost", tariff.Cost);
-                if(tariff.Id != null)
-                {
-                    cmd.Parameters.AddWithValue("id", tariff.Id);
-                }
-                cmd.Prepare();
-                cmd.ExecuteNonQuery();
-            }
-            catch(Exception e)
-            {
-                Console.Error.WriteLine(e.Message);
-            }
-        }
-
         public void AddTariff(Tariff tariff)
         {
-            string sql = $"INSERT INTO {this.db}(\"Name\", \"Cost\") VALUES(@name, @cost)";
-            AddUpdate(sql, tariff);
+            this.con.Insert(tariff);
         }
 
         public void UpdateTariffs(Tariff tariff)
         {
-            string sql = $"UPDATE {this.db} SET \"Name\"=@name, \"Cost\"=@cost WHERE \"ID\"=@id ";
-            AddUpdate(sql, tariff);
+            this.con.Update(tariff);
         }
 
         public void DeleteTariff(Guid id)
         {
             try
             {
-                string sql = $"DELETE FROM {this.db} WHERE \"ID\"=@id ";
-                using var cmd = new NpgsqlCommand(sql, this.con);
-                cmd.Parameters.AddWithValue("id", id);
-                cmd.Prepare();
-                cmd.ExecuteNonQuery();
+                this.con.Delete<Tariff>(t => t.Id == id);
             }
             catch(Exception e)
             {
@@ -109,18 +68,14 @@ namespace lab2
         {
             try
             {
-                string sql = string.Format(@"
-                            INSERT INTO {0}
-                            (""ID"", ""Name"", ""Cost"")
+                this.con.ExecuteSql(@"
+                            INSERT INTO tariffs
+                            (id, name, cost)
                             SELECT 
                                 uuid_generate_v4(),
                                 md5(random()::text),
                                 trunc(random()*10000) :: integer
-                            FROM generate_series(1, @n)", this.db);
-                using var cmd = new NpgsqlCommand(sql, this.con);
-                cmd.Parameters.AddWithValue("n", n);
-                cmd.Prepare();
-                cmd.ExecuteNonQuery();
+                            FROM generate_series(1, @n)", new {n});
             }
             catch(Exception e)
             {
@@ -132,21 +87,10 @@ namespace lab2
         {
             try
             {
-                string sql = $"SELECT * FROM {this.db} WHERE \"Name\" ILIKE @name AND \"Cost\" < @cost";
-                using var cmd = new NpgsqlCommand(sql, this.con);
-                cmd.Parameters.AddWithValue("name", $"%{name}%");
-                cmd.Parameters.AddWithValue("cost", cost);
-                cmd.Prepare();
-                using NpgsqlDataReader rdr = cmd.ExecuteReader();
-                List<Tariff> tariffs = new List<Tariff>();
-                
-                while(rdr.Read())
-                {
-                    Tariff tariff= new Tariff(rdr.GetString(0), rdr.GetInt32(1), rdr.GetGuid(2));
-                    tariffs.Add(tariff);
-                }
-
-                return tariffs;
+                var q = this.con.From<Tariff>()
+                .Where(t => t.Name.Contains(name))
+                .And(t => t.Cost < cost);
+                return this.con.Select<Tariff>(q);
             }
             catch(Exception e)
             {

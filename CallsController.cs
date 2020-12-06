@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace lab2
+namespace lab3
 {
-    using FilteredCalls = System.Tuple<string, string, string, string>;
     public class CallsController
     {
         Users usersModel;
@@ -42,7 +41,11 @@ namespace lab2
                 {
                     throw new Exception();
                 }
-                callsModel.AddPhoneCall(new Call(userIdFirst, userIdSecond, duration));
+                Call call = new Call();
+                call.FirstUserId = userIdFirst;
+                call.SecondUserId = userIdSecond;
+                call.Duration = duration;
+                callsModel.AddPhoneCall(call);
                 Console.Clear();
             }
             catch(Exception)
@@ -89,7 +92,10 @@ namespace lab2
                 {
                     throw new Exception();
                 }
-                callsModel.UpdatePhoneCall(new Call(userIdFirst, userIdSecond, duration));
+                call.FirstUserId = userIdFirst;
+                call.SecondUserId = userIdSecond;
+                call.Duration = duration;
+                callsModel.UpdatePhoneCall(call);
                 Console.Clear();
             }
             catch(Exception)
@@ -122,7 +128,7 @@ namespace lab2
             }
         }
 
-        public List<FilteredCalls> FilterCalls()
+        public List<(string, string, string, string)> FilterCalls()
         {
             Console.WriteLine("Enter first name or skip:");
             string name1 = Console.ReadLine();
@@ -134,7 +140,7 @@ namespace lab2
             string tel2 = Console.ReadLine();
             Console.Clear();
             var watch = System.Diagnostics.Stopwatch.StartNew();
-            List<FilteredCalls> calls = callsModel.GetFilteredCalls(name1, tel1, name2, tel2);
+            var calls = callsModel.GetFilteredCalls(name1, tel1, name2, tel2);
             watch.Stop();
             var elapsedMs = watch.ElapsedMilliseconds;
             Console.Clear();

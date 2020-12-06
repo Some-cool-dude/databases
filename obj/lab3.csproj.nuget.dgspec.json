@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/andrew/bd/lab2/lab2.csproj": {}
+    "/home/andrew/bd/lab3/lab3.csproj": {}
   },
   "projects": {
-    "/home/andrew/bd/lab2/lab2.csproj": {
+    "/home/andrew/bd/lab3/lab3.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/andrew/bd/lab2/lab2.csproj",
-        "projectName": "lab2",
-        "projectPath": "/home/andrew/bd/lab2/lab2.csproj",
+        "projectUniqueName": "/home/andrew/bd/lab3/lab3.csproj",
+        "projectName": "lab3",
+        "projectPath": "/home/andrew/bd/lab3/lab3.csproj",
         "packagesPath": "/home/andrew/.nuget/packages/",
-        "outputPath": "/home/andrew/bd/lab2/obj/",
+        "outputPath": "/home/andrew/bd/lab3/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/andrew/.nuget/NuGet/NuGet.Config"
@@ -36,9 +36,17 @@
       "frameworks": {
         "netcoreapp3.0": {
           "dependencies": {
-            "Npgsql": {
+            "ServiceStack.OrmLite.PostgreSQL": {
               "target": "Package",
-              "version": "[4.1.5, )"
+              "version": "[5.10.2, )"
+            },
+            "dapper": {
+              "target": "Package",
+              "version": "[2.0.78, )"
+            },
+            "npgsql": {
+              "target": "Package",
+              "version": "[5.0.0, )"
             }
           },
           "imports": [

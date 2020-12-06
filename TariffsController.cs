@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace lab2
+namespace lab3
 {
     public class TariffsController
     {
@@ -26,9 +26,12 @@ namespace lab2
                     throw new Exception();
                 }
                 Console.WriteLine("Enter cost:");
-                int cost = 0;
+                int cost = 10;
                 cost = int.Parse(Console.ReadLine());
-                tariffsModel.AddTariff(new Tariff(name, cost));
+                Tariff tariff = new Tariff();
+                tariff.Name = name;
+                tariff.Cost = cost;
+                tariffsModel.AddTariff(tariff);
                 Console.Clear();
             }
             catch(Exception)
@@ -62,7 +65,9 @@ namespace lab2
                 }
 
                 int cost = int.Parse(viewer.ReadLine(tariff.Cost.ToString()));
-                tariffsModel.UpdateTariffs(new Tariff(name, cost, tariff.Id));
+                tariff.Name = name;
+                tariff.Cost = cost;
+                tariffsModel.UpdateTariffs(tariff);
                 Console.Clear();
             }
             catch(Exception)

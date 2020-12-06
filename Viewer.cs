@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 
-namespace lab2
+namespace lab3
 {
-    using FilteredCalls = System.Tuple<string, string, string, string>;
     public class Viewer
     {
         public string ReadLine(string Default)
@@ -70,7 +69,7 @@ namespace lab2
             Console.WriteLine($"{"Name", -20} {"Telephone", -10} {"Cost", -4}");
             foreach(User user in users)
             {
-                Console.WriteLine($"{user.Name, -20} {user.TelepnoneNumber, -10} {user.Funds, -4}");
+                Console.WriteLine($"{user.Name, -20} {user.TelephoneNumber, -10} {user.Funds, -4}");
             }
         }
 
@@ -97,10 +96,10 @@ namespace lab2
             }
         }
 
-        public void ShowFilteredCalls(List<FilteredCalls> calls)
+        public void ShowFilteredCalls(List<(string, string, string, string)> calls)
         {
             Console.WriteLine($"{"Name1", -20}, {"Telephone1", -10}, {"Name2", -20}, {"Telephone2", -10}");
-            foreach(FilteredCalls call in calls)
+            foreach(var call in calls)
             {
                 Console.WriteLine($"{call.Item1, -20}, {call.Item2, -10}, {call.Item3, -20}, {call.Item4, -10}");
             }

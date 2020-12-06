@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace lab2
+namespace lab3
 {
     public class UsersController
     {
@@ -39,6 +39,10 @@ namespace lab2
                 viewer.ShowTariffs(tariffs);
                 Console.WriteLine("\nEnter tariff id or nothing:");
                 string id = Console.ReadLine();
+                User user = new User();
+                user.Name = name;
+                user.TelephoneNumber = tel;
+                user.Funds = funds;
                 if(id != "")
                 {
                     Guid tariffId = new Guid(id);
@@ -47,11 +51,12 @@ namespace lab2
                     {
                         throw new Exception();
                     }
-                    usersModel.AddUser(new User(name, tel, funds, tariffID: tariffId));
+                    user.TariffId = tariffId;
+                    usersModel.AddUser(user);
                 }
                 else
                 {
-                    usersModel.AddUser(new User(name, tel, funds));
+                    usersModel.AddUser(user);
                 }
                 Console.Clear();
             }
@@ -85,7 +90,7 @@ namespace lab2
                 }
 
                 Console.WriteLine("Change telephone number:");
-                string tel = viewer.ReadLine(user.TelepnoneNumber);
+                string tel = viewer.ReadLine(user.TelephoneNumber);
                 if(tel == "")
                 {
                     throw new Exception();
@@ -96,7 +101,10 @@ namespace lab2
                 List<Tariff> tariffs = tariffsModel.GetTariffs();
                 viewer.ShowTariffs(tariffs);
                 Console.WriteLine("\nChange tariff id:");
-                id = viewer.ReadLine(user.TariffID.ToString());
+                id = viewer.ReadLine(user.TariffId.ToString());
+                user.Name = name;
+                user.TelephoneNumber = tel;
+                user.Funds = funds;
                 if(id != "")
                 {
                     Guid tariffId = new Guid(id);
@@ -105,11 +113,12 @@ namespace lab2
                     {
                         throw new Exception();
                     }
-                    usersModel.UpdateUser(new User(name, tel, funds, user.Id, tariffID: tariffId));
+                    user.TariffId = tariffId;
+                    usersModel.UpdateUser(user);
                 }
                 else
                 {
-                    usersModel.UpdateUser(new User(name, tel, funds, user.Id));
+                    usersModel.UpdateUser(user);
                 }
                 Console.Clear();
             }
@@ -124,7 +133,7 @@ namespace lab2
         {
             viewer.ShowUsers(users);
             Console.WriteLine("\nEnter id of desire user:");
-            string id = Console.ReadLine();;
+            string id = Console.ReadLine();
             try
             {
                 Guid userId = new Guid(id);
